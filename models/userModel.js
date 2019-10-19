@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please confirm your password'],
     validate: {
-      //this only works on create and SAVE!!
+      //!IMPORTANT💥 this only works on create and SAVE!! //
       validator: function(el) {
         return el === this.password;
       },
@@ -56,6 +56,13 @@ userSchema.pre('save', async function(next) {
   //Delete passwordCoonfirm
   this.passwordConfirm = undefined;
   console.log(this.passwordConfirm);
+  next();
+});
+
+userSchema.pre('save', function(next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 

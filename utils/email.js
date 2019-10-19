@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 
 const sendEmail = async options => {
   // 1) Create a transpoter
-  const transpoter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     // service: 'Gmail',
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -12,9 +12,11 @@ const sendEmail = async options => {
     }
   });
 
+  console.log(`options: ${options.message}`);
+
   // 2) Define the email options
   const mailOptions = {
-    from: 'Jonas Schmedtmann <admin@gmail.io>',
+    from: 'admin <admin@gmail.io>',
     to: options.email,
     subject: options.subject,
     text: options.message
@@ -22,7 +24,7 @@ const sendEmail = async options => {
   };
   // 3) Actually send the email
 
-  await transpoter.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 };
-sendEmail().catch(console.error);
+// sendEmail().catch(console.error);
 module.exports = sendEmail;
