@@ -1,43 +1,20 @@
 const User = require('../models/userModel');
-const catchAsync = require('../utils/catchAsync');
-
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  //Send Response
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users
-    }
-  });
-});
+// const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    meassage: 'This route is not yet defind!'
+    message: 'This route is not yet defind! Please use /signup instead'
   });
+};
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    meassage: 'This route is not yet defind!'
-  });
-};
-
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    meassage: 'This route is not yet defind!'
-  });
-};
-
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    meassage: 'This route is not yet defind!'
-  });
-};
+exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
+//DO NOT update passwords with this
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);
