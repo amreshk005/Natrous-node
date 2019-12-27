@@ -171,7 +171,8 @@ tourSchema.pre(/^find/, function(next) {
 
 tourSchema.pre(/^find/, function(next) {
   this.populate({
-    path: 'guides'
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
   });
   next();
 });
